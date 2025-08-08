@@ -1,0 +1,248 @@
+<Window x:Class="PortKnocker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PortKnocker by manuelmode"
+        Width="1200" Height="1200"
+        MinWidth="1200" MinHeight="1200"
+		Icon="pack://application:,,,/icon.ico"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI Variable"
+        SnapsToDevicePixels="True"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResize"
+        Background="{DynamicResource WindowBackgroundBrush}">
+		
+
+    <Window.Resources>
+        <!-- Subtle Win11 surface -->
+        <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#F4F5F8"/>
+
+        <!-- Modern button style (rounded, hover/press states) -->
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+            <Setter Property="Foreground" Value="#222"/>
+            <Setter Property="Background" Value="#E9ECF2"/>
+            <Setter Property="BorderBrush" Value="#D2D7E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="8"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#DDE3EE"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#CBD6E9"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,12,12"/>
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="2"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="280"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Saved Destinations spans down -->
+            <GroupBox Header="Saved Destinations" Grid.Column="0" Grid.RowSpan="2" Margin="0,0,12,0">
+                <DockPanel>
+                    <ListBox x:Name="ProfilesList" DisplayMemberPath="Name" Margin="4"/>
+                </DockPanel>
+            </GroupBox>
+
+            <!-- Right column -->
+            <StackPanel Grid.Column="1">
+                <GroupBox Header="Destination">
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Name:" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="TxtName" Grid.Column="1" MinWidth="260"/>
+
+                        <TextBlock Text="IP / Host:" Grid.Column="2" Margin="12,0,6,0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="TxtIp" Grid.Column="3" MinWidth="260"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Knock Steps (up to 4)">
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Step 1 -->
+                        <TextBlock Text="Step 1:  Port" Margin="0,0,6,8" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBox x:Name="Port1" Width="80" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="Proto1" Width="90">
+                                <ComboBoxItem Content="TCP" IsSelected="True"/>
+                                <ComboBoxItem Content="UDP"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Step 2 -->
+                        <TextBlock Text="Step 2:  Port" Grid.Row="1" Margin="0,0,6,8" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBox x:Name="Port2" Width="80" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="Proto2" Width="90">
+                                <ComboBoxItem Content="TCP" IsSelected="True"/>
+                                <ComboBoxItem Content="UDP"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Step 3 -->
+                        <TextBlock Text="Step 3:  Port" Grid.Row="2" Margin="0,0,6,8" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBox x:Name="Port3" Width="80" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="Proto3" Width="90">
+                                <ComboBoxItem Content="TCP" IsSelected="True"/>
+                                <ComboBoxItem Content="UDP"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Step 4 -->
+                        <TextBlock Text="Step 4:  Port" Grid.Row="3" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal">
+                            <TextBox x:Name="Port4" Width="80" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="Proto4" Width="90">
+                                <ComboBoxItem Content="TCP" IsSelected="True"/>
+                                <ComboBoxItem Content="UDP"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Settings -->
+                        <TextBlock Text="Step delay (ms):" Grid.Column="2" Margin="12,0,6,0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="TxtDelay" Grid.Column="3" Width="100" Text="200"/>
+
+                        <TextBlock Text="TCP timeout (ms):" Grid.Column="2" Grid.Row="1" Margin="12,0,6,0" VerticalAlignment="Center"/>
+                        <TextBox x:Name="TxtTcpTimeout" Grid.Column="3" Grid.Row="1" Width="100" Text="400"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Mappings moved here -->
+                <GroupBox Header="Auto-Knock Mappings (first match wins)">
+                    <DockPanel Margin="6">
+                        <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="Rule name:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBox x:Name="MapName" Width="160" Margin="0,0,10,0"/>
+                                <TextBlock Text="Type:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <ComboBox x:Name="MapType" Width="110" Margin="0,0,10,0">
+                                    <ComboBoxItem Content="AnyIp" IsSelected="True"/>
+                                    <ComboBoxItem Content="ExactIp"/>
+                                    <ComboBoxItem Content="Cidr"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="Pattern (IP or CIDR):" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBox x:Name="MapPattern" Width="220" Margin="0,0,10,0" ToolTip="IP, Hostname, or CIDR"/>
+                                <TextBlock Text="Ports (CSV, optional):" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBox x:Name="MapPorts" Width="160" Margin="0,0,10,0" ToolTip="Empty = all ports"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="Profile:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <ComboBox x:Name="MapProfile" Width="240" />
+                                <Button Content="Add / Update" Width="120" Margin="10,0,0,0" Click="BtnMapAddUpdate_Click"/>
+                                <Button Content="Delete" Width="100" Margin="6,0,0,0" Click="BtnMapDelete_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ListBox x:Name="MappingsList" DockPanel.Dock="Bottom" Height="130" Margin="0,6,0,0"
+                                 SelectionChanged="MappingsList_SelectionChanged"/>
+                    </DockPanel>
+                </GroupBox>
+
+                <!-- Monitor -->
+                <GroupBox Header="Auto-Knock Monitor">
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Watch ports (CSV):" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBox x:Name="TxtWatchPorts" Grid.Column="1" Text="58291,8291"/>
+                        <Button x:Name="BtnToggleMonitor" Grid.Column="2" Content="Enable" Width="110" Margin="10,0,0,0" Click="BtnToggleMonitor_Click"/>
+                        <Button x:Name="BtnOpenLog" Grid.Column="3" Content="Open Logs" Width="110" Margin="10,0,0,0" Click="BtnOpenLog_Click"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Actions -->
+				<StackPanel Orientation="Horizontal"
+							HorizontalAlignment="Right"
+							Margin="0,6,0,0">
+					<Button x:Name="BtnSave" Content="Save / Update" Width="140" Click="BtnSave_Click"/>
+					<Button x:Name="BtnDelete" Content="Delete" Width="110" Click="BtnDelete_Click"/>
+					<Button x:Name="BtnKnock" Content="Knock" Width="110"
+							Margin="8,0,32,0" Click="BtnKnock_Click"/>
+				</StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- Log -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Header="Log" Grid.Column="1">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBox x:Name="TxtLog" IsReadOnly="True" TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+                </ScrollViewer>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
