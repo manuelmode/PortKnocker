@@ -56,9 +56,7 @@ Tip: When you save a new destination, the app can auto-create a matching mapping
 Profiles & Mappings (JSON)
 profiles.json sits next to PortKnocker.exe and looks like this:
 
-json
-Copy
-Edit
+
 {
   "Profiles": [
     {
@@ -84,6 +82,7 @@ Edit
   ],
   "WatchPorts": [58291, 8291]
 }
+
 Profiles → what to knock
 
 Mappings → when/where to auto-knock
@@ -93,9 +92,6 @@ WatchPorts → the monitor listens for these outbound ports at startup
 Build from Source
 Requirements: .NET 8 SDK, Windows 10/11
 
-powershell
-Copy
-Edit
 # clone your repo
 git clone https://github.com/<you>/PortKnocker.git
 cd PortKnocker
