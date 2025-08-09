@@ -1,4 +1,4 @@
-Quick MikroTik config
+# Quick MikroTik config
 
 Goal: Only open Winbox (8291) after a correct 3-step knock (TCP 60722 → UDP 56321 → UDP 52913) from the same source IP. Access stays open for 5 minutes (changeable).
 
@@ -10,32 +10,33 @@ Works on RouterOS v6/v7. Paste in /ip firewall (Terminal).
 2.	Rules (order matters. Place them near the top of your input chain, after “established/related allow”, before general drops):
 
 /ip firewall filter
-# 0) Allow established/related first (you likely already have these)
+ 0) Allow established/related first (you likely already have these)
 add chain=input connection-state=established,related action=accept comment="allow established/related"
 
-# 1) Final allow: once knocked, allow Winbox (and any other ports you want)
+ 1) Final allow: once knocked, allow Winbox (and any other ports you want)
 add chain=input src-address-list=pk.allowed protocol=tcp dst-port=8291 action=accept comment="PK: allow Winbox for knocked IPs"
-# (Optional) allow SSH, etc:
-# add chain=input src-address-list=pk.allowed protocol=tcp dst-port=22 action=accept comment="PK: allow SSH for knocked IPs"
 
-# 2) Knock #1 -> add to stage1 for 30s
+ (Optional) allow SSH, etc:
+ add chain=input src-address-list=pk.allowed protocol=tcp dst-port=22 action=accept comment="PK: allow SSH for knocked IPs"
+
+ 2) Knock #1 -> add to stage1 for 30s
 add chain=input protocol=tcp dst-port=60722 action=add-src-to-address-list \
     address-list=pk.stage1 address-list-timeout=30s comment="PK: step1 TCP 60722"
 
-# 3) Knock #2 -> must be in stage1, then move to stage2 for 30s
+ 3) Knock #2 -> must be in stage1, then move to stage2 for 30s
 add chain=input src-address-list=pk.stage1 protocol=udp dst-port=56321 action=add-src-to-address-list \
     address-list=pk.stage2 address-list-timeout=30s comment="PK: step2 UDP 56321"
 
-# 4) Knock #3 (final) -> must be in stage2, then add to allowed for 5m
+ 4) Knock #3 (final) -> must be in stage2, then add to allowed for 5m
 add chain=input src-address-list=pk.stage2 protocol=udp dst-port=52913 action=add-src-to-address-list \
     address-list=pk.allowed address-list-timeout=5m comment="PK: step3 UDP 52913 -> ALLOWED 5m"
 
-# 5) (Recommended) Drop invalid
+ 5) (Recommended) Drop invalid
 add chain=input connection-state=invalid action=drop comment="drop invalid"
 
-# 6) Your normal allowlist rules (LAN mgmt subnets, etc) can go here
+ 6) Your normal allowlist rules (LAN mgmt subnets, etc) can go here
 
-# 7) Default drop (keep at the end)
+ 7) Default drop (keep at the end)
 add chain=input action=drop comment="drop everything else"
 
 Optional: ICMP “payload size” knock (advanced)
@@ -55,7 +56,7 @@ You can mix ICMP with TCP/UDP steps. Just remember to compute packet-size = payl
 
 
 
-Build your own package
+# Build your own package
 
 
 Build your own package
