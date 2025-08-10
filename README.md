@@ -40,8 +40,6 @@ Goal: Only open Winbox (8291) after a correct 3-step knock (TCP 60722 → UDP 56
 
 Works on RouterOS v6/v7. Paste in /ip firewall (Terminal).
 
-### Rules (order matters. Place them near the top of your input chain, after “established/related allow”, before general drops):
-
 ```
 /interface list
 add name=WAN comment=defconf
