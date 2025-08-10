@@ -1,7 +1,7 @@
 # What Is PortKnocker?
-**PortKnocker** is a simple, fast, and secure way to open hidden MikroTik ports on demand.  
-With just a click, it sends a custom knock sequence to your router—unlocking services like **Winbox** or **SSH** for a limited time.  
-No VPN, no constant open ports—just stealthy, on-demand access.
+**PortKnocker** is a simple, fast, and secure way to unlock hidden MikroTik ports only when you need them.  
+With a single click, it sends a custom knock sequence to your router temporarily opening services like **Winbox** or **SSH** for secure access.  
+No VPNs, no always open ports, just stealthy, ondemand connectivity.
 
 ## Key Features
 
